@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Update Page</title>
+</head>
+<body>
+    Employee Number:<input type="number" id="number" name="number" readonly><br>
+    Employee Name:<input type="text" id="name" name="name"><br>
+    AddressLine1:<input type="text" id="address1" name="address1"><br>
+    AddressLine2:<input type="text" id="address2" name="address2"><br>
+    City:<input type="text" id="city" name="city"><br>
+    Zip Code:<input type="number" id="zipcode" name="zipcode"><br>
+    <input type="button" value="Update" onclick="update()">
+<script>
+    $(document).ready(function () {
+        var id=localStorage.getItem("updateid");
+        $.get('http://localhost:8080/employee/findEmployeeById/'+id,function (data) {
+            $('#number').val(data.employeeNumber);
+            $('#name').val(data.employeeName);
+            $('#address1').val(data.employeeAddressLine1);
+            $('#address2').val(data.employeeAddressLine2);
+            $('#city').val(data.employeeCity);
+            $('#zipcode').val(data.employeeZipCode);
+        });
+    });
+    function update() {
+        var employeeNumber = $('#number').val();
+        var employeeName = $('#name').val();
+        var employeeAddressLine1 = $('#address1').val();
+        var employeeAddressLine2 = $('#address2').val();
+        var employeeCity = $('#city').val();
+        var employeeZipCode = $('#zipcode').val();
+        var employeeDetails = {
+            employeeNumber,
+            employeeName,
+            employeeAddressLine1,
+            employeeAddressLine2,
+            employeeCity,
+            employeeZipCode
+        }
+        $.ajax({
+            url:'http://localhost:8080/employee/updateEmployee',
+            type:'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(employeeDetails),
+            success: function () {
+                alert("Updated Successfully");
+                window.location.href = 'view.html';
+            }
+        })
+    }
+</script>
+</body>
+</html>

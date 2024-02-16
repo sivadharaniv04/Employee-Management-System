@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert Page</title>
+</head>
+<body>
+<form>
+    <input type="hidden" id="numder" name="number">
+    Employee Name:<input type="text" id="name" name="name"><br>
+    AddressLine1:<input type="text" id="address1" name="address1"><br>
+    AddressLine2:<input type="text" id="address2" name="address2"><br>
+    City:<input type="text" id="city" name="city"><br>
+    Zip Code:<input type="number" id="zipcode" name="zipcode"><br>
+    <input type="button" value="Insert" onclick="insertEmployee()"><br><br>
+
+    <input type="button" value="<<Previous Page" onclick="previousPage()">
+    <input type="button" value="Next Page>>" onclick="nextPage()">
+</form>
+<script>
+    function insertEmployee() {
+        var employeeNumber = $('#id').val();
+        var employeeName = $('#name').val();
+        var employeeAddressLine1 = $('#address1').val();
+        var employeeAddressLine2 = $('#address2').val();
+        var employeeCity = $('#city').val();
+        var employeeZipCode = $('#zipcode').val();
+        var employeeDetails = {
+            employeeNumber,
+            employeeName,
+            employeeAddressLine1,
+            employeeAddressLine2,
+            employeeCity,
+            employeeZipCode
+        }
+        $.ajax({
+            url: 'http://localhost:8080/employee/insertEmployee',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(employeeDetails),
+            success: function () {
+                alert("Inserted Successfully");
+                window.location.href = 'view.html';
+            }
+        })
+    }
+    function nextPage() {
+        window.location.href='view.html';
+    }
+    function previousPage() {
+        window.location.href='index.html';
+    }
+</script>
+</body>
+</html>

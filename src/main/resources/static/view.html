@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>View Page</title>
+</head>
+<body>
+<table border="2">
+    <thead>
+    <tr>
+        <td>Employee Number</td>
+        <td>Employee Name</td>
+        <td>Address Line1</td>
+        <td>Address Line2</td>
+        <td>City</td>
+        <td>Zip Code</td>
+        <td>Action</td>
+    </tr>
+    </thead>
+    <tbody id="tablebody">
+    </tbody>
+</table>
+<br>
+<br>
+<input type="button" value="<<Previous Page" onclick="previousPage()">
+<input type="button" value="Home Page/\" onclick="homePage()">
+<script>
+    $(document).ready(function () {
+        viewEmployee();
+    })
+
+    function viewEmployee() {
+        $.ajax({
+            url: 'http://localhost:8080/employee/viewEmployee',
+            type: 'GET',
+            success: function (employee) {
+                var tbody = $('#tablebody').empty();
+                employee.forEach(function (data) {
+                    var employeeData = '<tr>' +
+                        '<td>' + data.employeeNumber + '</td>' +
+                        '<td>' + data.employeeName + '</td>' +
+                        '<td>' + data.employeeAddressLine1 + '</td>' +
+                        '<td>' + data.employeeAddressLine2 + '</td>' +
+                        '<td>' + data.employeeCity + '</td>' +
+                        '<td>' + data.employeeZipCode + '</td>' +
+                        '<td>' +
+                        '<button type="button" onclick="updateEmployee(' + data.employeeNumber + ')">Update</button>' +
+                        '<button type="button" onclick="deleteEmployee(' + data.employeeNumber + ')">Delete</button>' +
+                        '</td>' +
+                        '</tr>'
+                    tbody.append(employeeData);
+                })
+            }
+        })
+    }
+
+    function updateEmployee(id) {
+        localStorage.setItem("updateid",id);
+        window.location.href='update.html';
+    }
+
+    function deleteEmployee(id) {
+        if (confirm("Are you sure to delete?")) {
+            $.ajax({
+                url: 'http://localhost:8080/employee/deleteEmployeeById/' + id,
+                type: 'DELETE',
+                success: function () {
+                    viewEmployee();
+                }
+            })
+        }
+    }
+
+    function homePage() {
+        window.location.href='index.html';
+    }
+    function previousPage() {
+        window.location.href='add.html';
+    }
+</script>
+</body>
+</html>
